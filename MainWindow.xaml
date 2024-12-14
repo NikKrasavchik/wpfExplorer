@@ -1,0 +1,90 @@
+﻿<Window x:Class="WpfApp2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp2"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid ShowGridLines="True">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <WrapPanel Name="Menu" Grid.Row="0">
+            <Button Name="MenuFilesButton">Файлы</Button>
+            <Button Name="SelectionFilesButton">Выделение</Button>
+            <Button Name="CommandsFilesButton">Команды</Button>
+            <Button Name="NetFilesButton">Сеть</Button>
+            <Button Name="TabsFilesButton">Вкладки</Button>
+            <Button Name="FavoritesFilesButton">Избранное</Button>
+            <Button Name="ViewFilesButton">Вид</Button>
+            <Button Name="SettingsFilesButton">Настройки</Button>
+            <Button Name="HelpFilesButton">Помощь</Button>
+        </WrapPanel>
+        <WrapPanel Name="Interactions" Grid.Row="1">
+            <Button Name="RefreshInteractionsButton">Refresh</Button>
+            <Button Name="CmdInteractionsButton">Cmd</Button>
+            <Button Name="AddInteractionsButton">Add</Button>
+            <Button Name="RemoveInteractionsButton">Remove</Button>
+            <Button Name="UpInteractionsButton">Up</Button>
+            <Button Name="ArchiveInteractionsButton">Archive</Button>
+            <Button Name="GlassInteractionsButton">Glass</Button>
+            <Button Name="LeftInteractionsButton">Left</Button>
+            <Button Name="RightInteractionsButton">Right</Button>
+        </WrapPanel>
+        <Grid Grid.Row="2" ShowGridLines="True" Name="Tables">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <WrapPanel Name="LeftTableDisks" Grid.Column="0" Grid.Row="0"></WrapPanel>
+            <WrapPanel Name="RightTableDisks" Grid.Column="1" Grid.Row="0"></WrapPanel>
+            <TextBlock Name="LeftTablePath" Grid.Column="0" Grid.Row="1">Path</TextBlock>
+            <TextBlock Name="RightTablePath" Grid.Column="1" Grid.Row="1">Path</TextBlock>
+
+            <DataGrid Name="LeftTable" Grid.Column="0" Grid.Row="2">
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridRow">
+                        <EventSetter Event="MouseDoubleClick" Handler="Row_DoubleClick"/>
+                    </Style>
+                </DataGrid.Resources>
+            </DataGrid>
+            <DataGrid Name="RightTable" Grid.Column="1" Grid.Row="2">
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridRow">
+                        <EventSetter Event="MouseDoubleClick" Handler="Row_DoubleClick"/>
+                    </Style>
+                </DataGrid.Resources>
+            </DataGrid>
+        </Grid>
+        <Grid Name="Footer" Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock HorizontalAlignment="Center" Grid.Column="0">View F3</TextBlock>
+            <TextBlock HorizontalAlignment="Center" Grid.Column="1">Edit F4</TextBlock>
+            <TextBlock HorizontalAlignment="Center" Grid.Column="2">Copy F5</TextBlock>
+            <TextBlock HorizontalAlignment="Center" Grid.Column="3">Move F6</TextBlock>
+            <TextBlock HorizontalAlignment="Center" Grid.Column="4">MakeDir F7</TextBlock>
+            <TextBlock HorizontalAlignment="Center" Grid.Column="5">Delete F8</TextBlock>
+            <TextBlock HorizontalAlignment="Center" Grid.Column="6">Terminal F9</TextBlock>
+            <TextBlock HorizontalAlignment="Center" Grid.Column="7">Exit F10</TextBlock>
+        </Grid>
+    </Grid>
+</Window>
