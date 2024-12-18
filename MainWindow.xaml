@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp2"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        KeyDown="Window_KeyDown">
     <Grid ShowGridLines="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
@@ -14,7 +15,6 @@
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         <WrapPanel Name="Menu" Grid.Row="0">
-            <Button Name="MenuFilesButton">Файлы</Button>
             <Button Name="SelectionFilesButton">Выделение</Button>
             <Button Name="CommandsFilesButton">Команды</Button>
             <Button Name="NetFilesButton">Сеть</Button>
@@ -51,14 +51,14 @@
             <TextBlock Name="LeftTablePath" Grid.Column="0" Grid.Row="1">Path</TextBlock>
             <TextBlock Name="RightTablePath" Grid.Column="1" Grid.Row="1">Path</TextBlock>
 
-            <DataGrid Name="LeftTable" Grid.Column="0" Grid.Row="2">
+            <DataGrid Name="LeftTable" Grid.Column="0" Grid.Row="2" IsReadOnly="True">
                 <DataGrid.Resources>
                     <Style TargetType="DataGridRow">
                         <EventSetter Event="MouseDoubleClick" Handler="Row_DoubleClick"/>
                     </Style>
                 </DataGrid.Resources>
             </DataGrid>
-            <DataGrid Name="RightTable" Grid.Column="1" Grid.Row="2">
+            <DataGrid Name="RightTable" Grid.Column="1" Grid.Row="2" IsReadOnly="True">
                 <DataGrid.Resources>
                     <Style TargetType="DataGridRow">
                         <EventSetter Event="MouseDoubleClick" Handler="Row_DoubleClick"/>

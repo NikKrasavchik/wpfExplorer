@@ -11,12 +11,16 @@ namespace WpfApp2
 {
     public class ComplexData
     {
+        public ComplexData()
+        {
+            this.name = "...";
+        }
         public ComplexData(File file)
         {
             this.name = file.name;
             this.type = file.type;
-            this.dateCreated = file.dateCreated;
-            this.dateLastWrite = file.dateLastWrite;
+            this.dateCreated = file.dateCreated.ToString();
+            this.dateLastWrite = file.dateLastWrite.ToString();
         }
         
         public ComplexData(Dir dir)
@@ -27,8 +31,8 @@ namespace WpfApp2
 
         public string name { get; set; }
         public string type { get; set; }
-        public DateTime dateCreated { get; set; }
-        public DateTime dateLastWrite { get; set; }
+        public string dateCreated { get; set; }
+        public string dateLastWrite { get; set; }
     }
 
     public class TableData
@@ -95,7 +99,7 @@ namespace WpfApp2
     {
         public File(string fullFilename)
         {
-            int indLastSlash = fullFilename.LastIndexOf('/');
+            int indLastSlash = fullFilename.LastIndexOf('\\');
             int indDot = fullFilename.LastIndexOf('.');
 
             string fileName = "";
@@ -124,7 +128,7 @@ namespace WpfApp2
     {
         public Dir(string fullDirectoryName)
         {
-            int indLastSlash = fullDirectoryName.LastIndexOf('/');
+            int indLastSlash = fullDirectoryName.LastIndexOf('\\');
 
             string directoryName = "";
             for (int i = indLastSlash + 1; i < fullDirectoryName.Length; i++)

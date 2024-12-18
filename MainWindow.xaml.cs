@@ -40,6 +40,8 @@ namespace WpfApp2
 
             if (!isError)
             {
+                if (path[path.LastIndexOf('\\') - 1] != ':')
+                    complexData.Add(new ComplexData());
                 for (int i = 0; i < tableData.getDirCount(); i++)
                     complexData.Add(new ComplexData(tableData.getDir(i)));
                 for (int i = 0; i < tableData.getFileCount(); i++)
@@ -47,11 +49,13 @@ namespace WpfApp2
 
                 table.ItemsSource = complexData;
 
+                var r = table.Items[0];
+
                 if (table.Name[0] == 'L')
                     LeftTablePath.Text = path;
                 else
                     RightTablePath.Text = path;
-            }    
+            }
         }
 
         public void initDriveButtons(WrapPanel wrapPanel)
@@ -81,7 +85,102 @@ namespace WpfApp2
         private void Row_DoubleClick(object sender, MouseButtonEventArgs e)
         {
             DataGridRow row = sender as DataGridRow;
-            // Some operations with this row
+            ComplexData rowData = row.Item as ComplexData;
+
+            var leftSelect = LeftTable.SelectedItem;
+            var rightSelect = RightTable.SelectedItem;
+            if (rowData.type == null)
+            {
+                DataGrid currentTable = null;
+                TextBlock currentTablePath = null;
+
+                if (leftSelect != null && rightSelect != null)
+                {
+                    LeftTable.SelectedItem = null;
+                    RightTable.SelectedItem = null;
+                    return;
+                }
+
+                if (leftSelect != null)
+                {
+                    currentTable = LeftTable;
+                    currentTablePath = LeftTablePath;
+                }
+                else if (rightSelect != null)
+                {
+                    currentTable = RightTable;
+                    currentTablePath = RightTablePath;
+                }
+
+                if (leftSelect != null || rightSelect != null)
+                {
+                    LeftTable.SelectedItem = null;
+                    RightTable.SelectedItem = null;
+
+                    if (rowData.name == "...")
+                    {
+                        currentTablePath.Text = currentTablePath.Text.Remove(currentTablePath.Text.Length - 1);
+                        int indLastSlash = currentTablePath.Text.LastIndexOf('\\');
+                        string path = "";
+                        for (int i = 0; i < indLastSlash + 1; i++)
+                            path += currentTablePath.Text[i];
+                        initTable(currentTable, path);
+                    }
+                    else
+                        initTable(currentTable, currentTablePath.Text + rowData.name + "\\");
+                }
+
+            }
+            else
+            {
+                string fullFileName = "";
+                if (leftSelect != null)
+                {
+                    LeftTable.SelectedItem = null;
+                    fullFileName += LeftTablePath.Text;
+                }
+                else if (rightSelect != null)
+                {
+                    RightTable.SelectedItem = null;
+                    fullFileName += RightTablePath.Text;
+                }
+                fullFileName += rowData.name + "." + rowData.type;
+                System.Diagnostics.Process.Start(fullFileName);
+            }
         }
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.F3)
+            {
+            }
+
+            if (e.Key == Key.F4)
+            {
+            }
+
+            if (e.Key == Key.F5)
+            {
+            }
+
+            if (e.Key == Key.F6)
+            {
+            }
+
+            if (e.Key == Key.F7)
+            {
+            }
+
+            if (e.Key == Key.F8)
+            {
+            }
+
+            if (e.Key == Key.F9)
+            {
+            }
+
+            if (e.SystemKey == Key.F10)
+                Close();
+        }
+
     }
 }
