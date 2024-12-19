@@ -49,8 +49,6 @@ namespace WpfApp2
 
                 table.ItemsSource = complexData;
 
-                var r = table.Items[0];
-
                 if (table.Name[0] == 'L')
                     LeftTablePath.Text = path;
                 else
@@ -89,6 +87,7 @@ namespace WpfApp2
 
             var leftSelect = LeftTable.SelectedItem;
             var rightSelect = RightTable.SelectedItem;
+
             if (rowData.type == null)
             {
                 DataGrid currentTable = null;
@@ -129,7 +128,6 @@ namespace WpfApp2
                     else
                         initTable(currentTable, currentTablePath.Text + rowData.name + "\\");
                 }
-
             }
             else
             {
@@ -145,37 +143,202 @@ namespace WpfApp2
                     fullFileName += RightTablePath.Text;
                 }
                 fullFileName += rowData.name + "." + rowData.type;
-                System.Diagnostics.Process.Start(fullFileName);
+                try
+                {
+                    System.Diagnostics.Process.Start(fullFileName);
+                }
+                catch (Exception exc)
+                {
+                    string messageBoxText = "Error while opening file";
+                    string caption = "Error";
+                    MessageBoxButton button = MessageBoxButton.YesNoCancel;
+                    MessageBoxImage icon = MessageBoxImage.Warning;
+
+                    MessageBox.Show(messageBoxText, caption, button, icon, MessageBoxResult.Yes);
+                }
             }
         }
+
+        private void l()
+        {
+            var leftSelect = LeftTable.SelectedItem;
+            var rightSelect = RightTable.SelectedItem;
+
+            if (leftSelect != null)
+            {
+                var leftT = LeftTable.Items[1];
+            }
+        }
+        private void dataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            var leftSelect = LeftTable.SelectedItem;
+            var rightSelect = RightTable.SelectedItem;
+
+            if (leftSelect != null)
+            {
+                var leftT = LeftTable.Items[1];
+            }
+            l();
+        }
+
+        public void RefreshInteractionsButton_Click(object sender, RoutedEventArgs e)
+        {
+            LeftTableDisks.Children.Clear();
+            RightTableDisks.Children.Clear();
+
+            initDriveButtons(LeftTableDisks);
+            initDriveButtons(RightTableDisks);
+
+            initTable(LeftTable, LeftTablePath.Text);
+            initTable(RightTable, RightTablePath.Text);
+        }
+
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
+            var leftSelect = LeftTable.SelectedItem;
+            var rightSelect = RightTable.SelectedItem;
+
             if (e.Key == Key.F3)
             {
+                if (leftSelect != null)
+                {
+                    LeftTable.SelectedItem = null;
+
+                    if ((leftSelect as ComplexData).type == null)
+                        initTable(RightTable, LeftTablePath.Text + (leftSelect as ComplexData).name + '\\');
+                }
+                else if (rightSelect != null)
+                {
+                    RightTable.SelectedItem = null;
+
+                    if ((rightSelect as ComplexData).type == null)
+                        initTable(LeftTable, RightTablePath.Text + (rightSelect as ComplexData).name + '\\');
+                }
             }
 
             if (e.Key == Key.F4)
             {
+                
             }
 
             if (e.Key == Key.F5)
             {
+                string fullFileName = "";
+                if (leftSelect != null)
+                {
+                    LeftTable.SelectedItem = null;
+                    fullFileName += LeftTablePath.Text + (leftSelect as ComplexData).name + ((leftSelect as ComplexData).type != null ? "." + (leftSelect as ComplexData).type : "");
+                }
+                else if (rightSelect != null)
+                {
+                    RightTable.SelectedItem = null;
+                    fullFileName = RightTablePath.Text + (rightSelect as ComplexData).name + ((rightSelect as ComplexData).type != null ? "." + (rightSelect as ComplexData).type : "");
+                }
+                Clipboard.Clear();
+                Clipboard.SetText(fullFileName);
             }
 
             if (e.Key == Key.F6)
             {
+                string copyingFileName = Clipboard.GetText();
+
+                int indLastSlash = copyingFileName.LastIndexOf('\\');
+                string fileName = "";
+                for (int i = indLastSlash + 1; i < copyingFileName.Length; i++)
+                    fileName += copyingFileName[i];
+
+                string dectinationFileName = null;
+                if (leftSelect != null)
+                {
+                    LeftTable.SelectedItem = null;
+                    dectinationFileName = LeftTablePath.Text + fileName;
+                }
+                else if (rightSelect != null)
+                {
+                    RightTable.SelectedItem = null;
+                    dectinationFileName = RightTablePath.Text + fileName;
+                }
+
+                try
+                {
+                    if (copyingFileName.LastIndexOf('.') == -1)
+                    {
+                        Directory.Move(copyingFileName, dectinationFileName);
+                    }
+                    else
+                    {
+                        File.Copy(copyingFileName, dectinationFileName);
+                    }
+                }
+                catch (IOException copyError)
+                {
+                    string messageBoxText = "Error while copying file";
+                    string caption = "File already exist";
+                    MessageBoxButton button = MessageBoxButton.YesNoCancel;
+                    MessageBoxImage icon = MessageBoxImage.Warning;
+
+                    MessageBox.Show(messageBoxText, caption, button, icon, MessageBoxResult.Yes);
+                }
+                initTable(LeftTable, LeftTablePath.Text);
+                initTable(RightTable, RightTablePath.Text);
             }
 
             if (e.Key == Key.F7)
             {
+                if (leftSelect != null)
+                {
+                    LeftTable.SelectedItem = null;
+
+                    string path = LeftTablePath.Text + "Новая папка";
+                    int num = 2;
+                    while (Directory.Exists(path))
+                    {
+                        path = LeftTablePath.Text + "Новая папка " + num.ToString();
+                        num++;
+                    }    
+                    Directory.CreateDirectory(path);
+
+                    initTable(LeftTable, LeftTablePath.Text);
+                }
+                else if (rightSelect != null)
+                {
+                    RightTable.SelectedItem = null;
+
+                    string path = RightTablePath.Text + "Новая папка";
+                    int num = 2;
+                    while (Directory.Exists(path))
+                    {
+                        path = RightTablePath.Text + "Новая папка " + num.ToString();
+                        num++;
+                    }
+                    Directory.CreateDirectory(path);
+
+                    initTable(RightTable, RightTablePath.Text);
+                }
             }
 
             if (e.Key == Key.F8)
             {
+                string fullFileName = "";
+                if (leftSelect != null)
+                {
+                    LeftTable.SelectedItem = null;
+                    fullFileName += LeftTablePath.Text + (leftSelect as ComplexData).name + ((leftSelect as ComplexData).type != null ? "." + (leftSelect as ComplexData).type : "");
+                }
+                else if (rightSelect != null)
+                {
+                    RightTable.SelectedItem = null;
+                    fullFileName = RightTablePath.Text + (rightSelect as ComplexData).name + ((rightSelect as ComplexData).type != null ? "." + (rightSelect as ComplexData).type : "");
+                }
+                File.Delete(fullFileName);
+
+                initTable(LeftTable, LeftTablePath.Text);
+                initTable(RightTable, RightTablePath.Text);
             }
 
             if (e.Key == Key.F9)
             {
+                System.Diagnostics.Process.Start(@"C:\\Windows\\System32\\Cmd.exe");
             }
 
             if (e.SystemKey == Key.F10)

@@ -15,7 +15,7 @@ namespace WpfApp2
         {
             this.name = "...";
         }
-        public ComplexData(File file)
+        public ComplexData(FileClass file)
         {
             this.name = file.name;
             this.type = file.type;
@@ -23,7 +23,7 @@ namespace WpfApp2
             this.dateLastWrite = file.dateLastWrite.ToString();
         }
         
-        public ComplexData(Dir dir)
+        public ComplexData(DirectoryClass dir)
         {
             this.name = dir.name;
             this.type = dir.type;
@@ -42,16 +42,16 @@ namespace WpfApp2
             try
             {
                 string[] allFiles = Directory.GetFiles(path);
-                files = new File[allFiles.Length];
+                files = new FileClass[allFiles.Length];
 
                 string[] allDirectories = Directory.GetDirectories(path);
-                dirs = new Dir[allDirectories.Length];
+                dirs = new DirectoryClass[allDirectories.Length];
 
                 for (int i = 0; i < allFiles.Length; i++)
-                    files[i] = new File(allFiles[i]);
+                    files[i] = new FileClass(allFiles[i]);
 
                 for (int i = 0; i < allDirectories.Length; i++)
-                    dirs[i] = new Dir(allDirectories[i]);
+                    dirs[i] = new DirectoryClass(allDirectories[i]);
             }
             catch (Exception e)
             {
@@ -82,22 +82,22 @@ namespace WpfApp2
             return dirs.Length;
         }
 
-        public File getFile(int index)
+        public FileClass getFile(int index)
         {
             return files[index];
         }
-        public Dir getDir(int index)
+        public DirectoryClass getDir(int index)
         {
             return dirs[index];
         }
 
         private string path;
-        File[] files;
-        Dir[] dirs;
+        FileClass[] files;
+        DirectoryClass[] dirs;
     }
-    public class File
+    public class FileClass
     {
-        public File(string fullFilename)
+        public FileClass(string fullFilename)
         {
             int indLastSlash = fullFilename.LastIndexOf('\\');
             int indDot = fullFilename.LastIndexOf('.');
@@ -124,9 +124,9 @@ namespace WpfApp2
         public DateTime dateLastWrite { get; set; }
     }
 
-    public class Dir
+    public class DirectoryClass
     {
-        public Dir(string fullDirectoryName)
+        public DirectoryClass(string fullDirectoryName)
         {
             int indLastSlash = fullDirectoryName.LastIndexOf('\\');
 
