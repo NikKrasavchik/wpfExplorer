@@ -26,14 +26,14 @@
         </WrapPanel>
         <WrapPanel Name="Interactions" Grid.Row="1">
             <Button Name="RefreshInteractionsButton" Click="RefreshInteractionsButton_Click" ClickMode="Press">Refresh</Button>
-            <Button Name="CmdInteractionsButton">Cmd</Button>
-            <Button Name="AddInteractionsButton">Add</Button>
-            <Button Name="RemoveInteractionsButton">Remove</Button>
-            <Button Name="UpInteractionsButton">Up</Button>
-            <Button Name="ArchiveInteractionsButton">Archive</Button>
-            <Button Name="GlassInteractionsButton">Glass</Button>
-            <Button Name="LeftInteractionsButton">Left</Button>
-            <Button Name="RightInteractionsButton">Right</Button>
+            <!--<Button Name="CmdInteractionsButton">Cmd</Button>-->
+            <!--<Button Name="AddInteractionsButton">Add</Button>-->
+            <Button Name="RemoveInteractionsButton" Click="RemoveInteractionsButton_Click" ClickMode="Press">Remove</Button>
+            <Button Name="UpInteractionsButton" Click="UpInteractionsButton_Click" ClickMode="Press">Up</Button>
+            <!--<Button Name="ArchiveInteractionsButton">Archive</Button>-->
+            <!--<Button Name="GlassInteractionsButton">Glass</Button>-->
+            <!--<Button Name="LeftInteractionsButton">Left</Button>-->
+            <!--<Button Name="RightInteractionsButton">Right</Button>-->
         </WrapPanel>
         <Grid Grid.Row="2" Name="Tables">
             <Grid.ColumnDefinitions>
@@ -51,22 +51,30 @@
             <TextBlock Name="LeftTablePath" Grid.Column="0" Grid.Row="1">Path</TextBlock>
             <TextBlock Name="RightTablePath" Grid.Column="1" Grid.Row="1">Path</TextBlock>
 
-            <DataGrid Name="LeftTable" Grid.Column="0" Grid.Row="2" CanUserAddRows="False" CellEditEnding="dataGrid_CellEditEnding">
-                <DataGrid.Resources>
-                    <Style TargetType="DataGridRow">
-                        <EventSetter Event="MouseDoubleClick" Handler="Row_DoubleClick"/>
-                        <!--<EventSetter Event="DataContextChanged" Handler="Row_DataContextChanged"/>-->
-                    </Style>
-                </DataGrid.Resources>
-            </DataGrid>
-            <DataGrid Name="RightTable" Grid.Column="1" Grid.Row="2" CanUserAddRows="False">
+            <DataGrid Name="LeftTable" Grid.Column="0" Grid.Row="2" AutoGenerateColumns="False" CanUserAddRows="False" CellEditEnding="dataGrid_CellEditEnding">
                 <DataGrid.Resources>
                     <Style TargetType="DataGridRow">
                         <EventSetter Event="MouseDoubleClick" Handler="Row_DoubleClick"/>
                     </Style>
                 </DataGrid.Resources>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding Id, UpdateSourceTrigger=PropertyChanged}" Header="id"/>
+                    <DataGridTextColumn Binding="{Binding name, UpdateSourceTrigger=PropertyChanged}" Header="name"/>
+                    <DataGridTextColumn Binding="{Binding type, UpdateSourceTrigger=PropertyChanged}" Header="type"/>
+                    <DataGridTextColumn Binding="{Binding dateCreated, UpdateSourceTrigger=PropertyChanged}" Header="dateCreated"/>
+                    <DataGridTextColumn Binding="{Binding dateLastWrite, UpdateSourceTrigger=PropertyChanged}" Header="dateLastWrite"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <DataGrid Name="RightTable" Grid.Column="1" Grid.Row="2" AutoGenerateColumns="False" CanUserAddRows="False" CellEditEnding="dataGrid_CellEditEnding">
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridRow">
+                        <EventSetter Event="MouseDoubleClick" Handler="Row_DoubleClick"/>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding name, UpdateSourceTrigger=PropertyChanged}" Header="name"/>
+                    <DataGridTextColumn Binding="{Binding type, UpdateSourceTrigger=PropertyChanged}" Header="type"/>
+                    <DataGridTextColumn Binding="{Binding dateCreated, UpdateSourceTrigger=PropertyChanged}" Header="dateCreated"/>
+                    <DataGridTextColumn Binding="{Binding dateLastWrite, UpdateSourceTrigger=PropertyChanged}" Header="dateLastWrite"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
@@ -79,16 +87,14 @@
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TextBlock HorizontalAlignment="Center" Grid.Column="0">View F3</TextBlock>
-            <TextBlock HorizontalAlignment="Center" Grid.Column="1">Edit F4</TextBlock>
-            <TextBlock HorizontalAlignment="Center" Grid.Column="2">Copy F5</TextBlock>
-            <TextBlock HorizontalAlignment="Center" Grid.Column="3">Paste F6</TextBlock>
-            <TextBlock HorizontalAlignment="Center" Grid.Column="4">MakeDir F7</TextBlock>
-            <TextBlock HorizontalAlignment="Center" Grid.Column="5">Delete F8</TextBlock>
-            <TextBlock HorizontalAlignment="Center" Grid.Column="6">Terminal F9</TextBlock>
-            <TextBlock HorizontalAlignment="Center" Grid.Column="7">Exit F10</TextBlock>
+            <TextBlock HorizontalAlignment="Center" Grid.Column="0">View F4</TextBlock>
+            <TextBlock HorizontalAlignment="Center" Grid.Column="1">Copy F5</TextBlock>
+            <TextBlock HorizontalAlignment="Center" Grid.Column="2">Paste F6</TextBlock>
+            <TextBlock HorizontalAlignment="Center" Grid.Column="3">MakeDir F7</TextBlock>
+            <TextBlock HorizontalAlignment="Center" Grid.Column="4">Delete F8</TextBlock>
+            <TextBlock HorizontalAlignment="Center" Grid.Column="5">Terminal F9</TextBlock>
+            <TextBlock HorizontalAlignment="Center" Grid.Column="6">Exit F10</TextBlock>
         </Grid>
     </Grid>
 </Window>

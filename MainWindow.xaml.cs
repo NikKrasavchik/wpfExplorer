@@ -159,26 +159,75 @@ namespace WpfApp2
             }
         }
 
-        private void l()
-        {
-            var leftSelect = LeftTable.SelectedItem;
-            var rightSelect = RightTable.SelectedItem;
-
-            if (leftSelect != null)
-            {
-                var leftT = LeftTable.Items[1];
-            }
-        }
         private void dataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
-            var leftSelect = LeftTable.SelectedItem;
-            var rightSelect = RightTable.SelectedItem;
+            ComplexData leftSelect = LeftTable.SelectedItem as ComplexData;
+            ComplexData rightSelect = RightTable.SelectedItem as ComplexData;
+
+            string currentTablePath = null;
+            DataGrid currentTable = null;
+            ComplexData currentSelect = null;
+
+            List<ComplexData> complexData = new List<ComplexData>();
+            TableData tableData = new TableData();
 
             if (leftSelect != null)
             {
-                var leftT = LeftTable.Items[1];
+                currentTablePath = LeftTablePath.Text;
+                currentTable = LeftTable;
+                currentSelect = leftSelect;
             }
-            l();
+            else if (rightSelect != null)
+            {
+                currentTablePath = RightTablePath.Text;
+                currentTable = RightTable;
+                currentSelect = rightSelect;
+            }
+
+            bool isError = tableData.determineFiles(currentTablePath);
+            for (int i = 0; i < tableData.getDirCount(); i++)
+                complexData.Add(new ComplexData(tableData.getDir(i)));
+            for (int i = 0; i < tableData.getFileCount(); i++)
+                complexData.Add(new ComplexData(tableData.getFile(i)));
+
+            try
+            {
+                for (int i = 0; i < complexData.Count; i++)
+                {
+                    bool flag = true;
+                    for (int j = 0; j < currentTable.Items.Count; j++)
+                        if ((currentTable.Items.GetItemAt(j) as ComplexData).name == (complexData[i] as ComplexData).name && (currentTable.Items.GetItemAt(j) as ComplexData).type == (complexData[i] as ComplexData).type)
+                        {
+                            flag = false;
+                            break;
+                        }
+                    if (flag)
+                    {
+                        string sourceName = currentTablePath + (complexData[i] as ComplexData).name;
+                        string destName = currentTablePath + currentSelect.name;
+
+                        if (currentSelect.type != null)
+                        {
+                            sourceName += '.' + (complexData[i] as ComplexData).type;
+                            destName += '.' + currentSelect.type;
+                            File.Move(sourceName, destName);
+                        }
+                        else if (currentSelect.type == null)
+                            Directory.Move(sourceName, destName);
+                        break;
+                    }
+                }
+            }
+            catch (Exception exc)
+            {
+                string messageBoxText = "Error while renaming file";
+                string caption = "Error";
+                MessageBoxButton button = MessageBoxButton.YesNoCancel;
+                MessageBoxImage icon = MessageBoxImage.Warning;
+
+                MessageBox.Show(messageBoxText, caption, button, icon, MessageBoxResult.Yes);
+            }
+            initTable(currentTable, currentTablePath);
         }
 
         public void RefreshInteractionsButton_Click(object sender, RoutedEventArgs e)
@@ -192,13 +241,76 @@ namespace WpfApp2
             initTable(LeftTable, LeftTablePath.Text);
             initTable(RightTable, RightTablePath.Text);
         }
+        public void RemoveInteractionsButton_Click(object sender, RoutedEventArgs e)
+        {
+            ComplexData leftSelect = LeftTable.SelectedItem as ComplexData;
+            ComplexData rightSelect = RightTable.SelectedItem as ComplexData;
+
+            string currentTablePath = null;
+            DataGrid currentTable = null;
+            ComplexData currentSelect = null;
+
+            List<ComplexData> complexData = new List<ComplexData>();
+            TableData tableData = new TableData();
+
+            if (leftSelect != null)
+            {
+                currentTablePath = LeftTablePath.Text;
+                currentTable = LeftTable;
+                currentSelect = leftSelect;
+            }
+            else if (rightSelect != null)
+            {
+                currentTablePath = RightTablePath.Text;
+                currentTable = RightTable;
+                currentSelect = rightSelect;
+            }
+
+            if (currentSelect.type == null)
+                Directory.Delete(currentTablePath + currentSelect.name, true);
+            else if (currentSelect.type != null)
+                File.Delete(currentTablePath + currentSelect.name + '.' + currentSelect.type);
+            initTable(currentTable, currentTablePath);
+        }
+        public void UpInteractionsButton_Click(object sender, RoutedEventArgs e)
+        {
+            ComplexData leftSelect = LeftTable.SelectedItem as ComplexData;
+            ComplexData rightSelect = RightTable.SelectedItem as ComplexData;
+
+            string currentTablePath = null;
+            DataGrid currentTable = null;
+
+            List<ComplexData> complexData = new List<ComplexData>();
+            TableData tableData = new TableData();
+
+            if (leftSelect != null && rightSelect != null)
+                return;
+            else if (leftSelect != null)
+            {
+                currentTablePath = LeftTablePath.Text;
+                currentTable = LeftTable;
+            }
+            else if (rightSelect != null)
+            {
+                currentTablePath = RightTablePath.Text;
+                currentTable = RightTable;
+            }
+
+            if (currentTablePath[currentTablePath.LastIndexOf('\\') - 1] == ':')
+                return;
+
+            string upPath = currentTablePath;
+            upPath = upPath.Remove(upPath.LastIndexOf('\\'));
+            upPath = upPath.Remove(upPath.LastIndexOf('\\') + 1);
+            initTable(currentTable, upPath);
+        }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             var leftSelect = LeftTable.SelectedItem;
             var rightSelect = RightTable.SelectedItem;
 
-            if (e.Key == Key.F3)
+            if (e.Key == Key.F4)
             {
                 if (leftSelect != null)
                 {
@@ -214,11 +326,6 @@ namespace WpfApp2
                     if ((rightSelect as ComplexData).type == null)
                         initTable(LeftTable, RightTablePath.Text + (rightSelect as ComplexData).name + '\\');
                 }
-            }
-
-            if (e.Key == Key.F4)
-            {
-                
             }
 
             if (e.Key == Key.F5)
@@ -344,6 +451,5 @@ namespace WpfApp2
             if (e.SystemKey == Key.F10)
                 Close();
         }
-
     }
 }
